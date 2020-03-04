@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>About Me</title>
+  <link rel="icon" href="pic.png" type="image/gif" sizes="16x16">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+body {
+  font-family: "Optima", Sans-serif;
+  color:white;
+  background:rgba(0,0,0,0.85);
+}
+.bod{
+  border-style:solid;
+  border-width:5px;
+  border-color:#ffb3ff;  
+}
+.boxes{
+    background-color:white;
+    margin : 70px;
+}
+.ilikeit {
+    background: linear-gradient(to top left, #33ccff 0%, #ff99cc 100%);
+}
+div.div1, div.div2 {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+div.div1 {
+  height: 30%;
+  top: 0;
+}
+div.div2 {
+  top: 30%;
+  bottom: 0;
+}
+.dropbtn {
+  background:url('dropdown.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: white;
+  margin-top: 20px;
+  margin-left:20px;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: rgba(0,0,0,0.85);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  margin-left:20px;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.dropdown-content a:hover {background-color:rgba(255,255,255,0.5);}
+
+.dropdown:hover .dropdown-content {display: block;
+margin-left: 20px;}
+
+.dropdown:hover .dropbtn {background:url('dropdown.png');
+background-repeat: no-repeat;
+  background-size: contain;}
+</style>
+</head>
+<body>
+<div class="div1 ilikeit">
+    <div class="dropdown">
+        <button class="dropbtn"></button>
+        <div class="dropdown-content">
+          <a style="color:white;" href="#">About Me</a>
+          <a style="color:white;" href="challenges.html">Challenges</a>
+          <a style="color:white;" href="#">Link 3</a>
+        </div>
+      </div>
+  <div class="centered">
+    <font size="26">About Me</font>
+  </div>  
+</div>
+<div class="div2">
+  <div style="background-color:rgba(0,0,0,0.4);height:90%;width: 50%;" class="w3-container w3-round-large centered bod">
+    <img src="github.jpg" class="w3-circle" alt="profile" style="width:30%">
+    <p>0xfantasticp</p>
+    <p>Hello there! I am a 19 year old pizza lover.</p> 
+    <p>I post here the random stuff I find interesting.</p>
+    <a  href="https://twitter.com/NaveenRamesh915">Twitter</a><br>
+    <a  href="https://www.linkedin.com/in/naveen-ramesh-8b2165177/">LinkedIn</a><br>
+    <a  href="mailto:naveenramesh915@gmail.com">GMail</a><br>
+    <a href="https://github.com/fantasticpanthom">GitHub</a>
+  </div>
+</div>  
+</body>
+</html>
