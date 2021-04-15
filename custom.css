@@ -1,12 +1,13 @@
 body {
     background-color: #1c1e29;
+      margin-left: 5%;
+    margin-right: 5%;
   }
 
 nav{
     background-color:#33354b ;
     margin-top: 2%;
-    margin-left: 5%;
-    margin-right: 5%;
+  
     border-radius: 3;
 }
 .navbar.navbar-light.rounded a {
