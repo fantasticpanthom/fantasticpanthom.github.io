@@ -1,14 +1,14 @@
 body {
     background-color: #1c1e29;
-      margin-left: 5%;
+    color: white;
+    margin-left: 5%;
     margin-right: 5%;
-    color:white;
+    margin-bottom: 5%;
   }
 
 nav{
     background-color:#33354b ;
     margin-top: 2%;
-  
     border-radius: 3;
 }
 .navbar.navbar-light.rounded a {
@@ -19,6 +19,14 @@ nav{
 #cursor{
     font-size: 30px;
     color: #0ff;
+}
+
+#bluetext{
+    color:#0ff;
+}
+
+#pinktext{
+    color: #ff4473;
 }
 
 .fa {
@@ -69,3 +77,7 @@ nav{
     margin-top: 10%;
     margin-bottom: 10%;
   }
+
+p{
+    font-size: x-large;
+}  
