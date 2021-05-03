@@ -43,7 +43,7 @@
       <script src="https://gist.github.com/fantasticpanthom/07062e439e5f07a97bbeb2add6a65ff7.js"></script>
       <p>Now categorise them into separate text files based on the stack detected.<br><br>
       <kbd><span id='pinktext'>cat nuclei.txt | cut -d ' ' -f3 | sed 's/\[//g' | sed 's/\]//g' | sed 's/tech-detect://g'| sort -u | xargs -n1 -I{} sh -c 'cat nuclei.txt | grep {} | tee -a {}.txt'</span></kbd></p>
-      <p>First let us discuss why I do this then we will move on to break the command down into parts and understand how it works.</p>
+      <p>First let us discuss why do I do this then we will move on to break the command down into parts and understand how it works.</p>
       <h5 class="display-4" style="margin-top: 2%;"><span id="bluetext">Why do I separate these on basis of </span><span id="pinktext">common tech stack?</span></h5>
       <hr style="height:4px;">
       <p>Reason behind sorting these is<br>
@@ -75,7 +75,18 @@
       <p>One common error that I have made in my past is overwriting existing files i.e I already had a file called nuclei.txt and erased its contect with new content. So,I highly suggest you to use almost always -a tag with tee as it doesnt overwrite but just appends it to existing file so no previous data is lost.</p>
       <p>Even when using -a what if we had data of say redacted1.com in file.txt and we appended details of redacted2.com into the same file.<br>
         This can also be easily sorted out by running the following commands <kbd><span id="bluetext">cat file.txt | grep 'redacted2.com' | tee -a redacted2.txt</span></kbd> , <kbd><span id='bluetext'>cat file.txt | grep -v 'redacted2.com' | tee -a oldfile.txt</span></kbd> and <kbd><span id='bluetext'>rm file.txt</span></kbd></p>   
-      <p>Hope you enjoyed reading this and if you have any suggestions related to this or want to discuss with me about some security related stuff feel free to contact me.  <a class="navbar-brand" href="index.html"><kbd>HOME</kbd></a> has my contact information.<br>
+        <hr style="height:4px;">
+        <p> Links to tools and websites I that helped me find and exploit my vulnerabilities
+          <ul>
+          <li>https://github.com/projectdiscovery/httpx</li>
+          <li>https://github.com/projectdiscovery/nuclei</li>
+          <li>https://hackerone.com/hacktivity</li>
+          <li>http://h1.nobbd.de/</li>
+          <li>https://github.com/cvebase/cvebase.com</li>
+        </ul>
+
+      </p>
+        <p>Hope you enjoyed reading this and if you have any suggestions related to this or want to discuss with me about some security related stuff feel free to contact me.  <a class="navbar-brand" href="index.html"><kbd>HOME</kbd></a> has my contact information.<br>
         HAPPY <span id="pinktext">LEARNING</span> and HAPPY <span id="bluetext">HACKING</span> !!!.
       </p>
       
