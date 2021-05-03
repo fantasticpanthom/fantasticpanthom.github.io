@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link href="custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>ipanda</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-light rounded">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="index.html">cd /home/<span id="cursor">_</span></a>
+          <a class="navbar-brand" href="#" style="font-size: xx-large;background: -webkit-linear-gradient(#ff4473, #0ff);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">Believe and Persist</a>
+          <a class="navbar-brand" href="posts.html">POSTS</a>
+        </div>
+      </nav>
+      <h1 class="display-4" style="margin-top: 2%;">Finding <b><span id="pinktext">known exploits</span></b> for bugbounties.</h1>
+      <hr style="height:4px;">
+      <p>Hello everyone, in this blog we will be looking at how I found criticals on a private program using known vulnerabilities.<br>
+        This is a private program and doesn't allow disclosure so let us assume that our target is <kbd><span id="bluetext">*.redacted.com</span></kbd>.<br> This is a wide scope target and all subdomains of <kbd><span id="bluetext">redacted.com</span></kbd> are in scope. <br>We can start by googling about the company. Usually upon googling a card element at the right side of search results containing a brief description about the company.<br>
+        <br></p>
+        <img src='images/blog1/image1.png' class="img-fluid" alt='replica-gsearch'>
+        <p>
+          <br>
+        Since this is a wide scope target we can start with subdomain enumeration. There are a lot of open source tools that we can use to get good amount of subdomains. Most of the times all of these subdomains are up or might resolve to some common domain. Lets us say we have all of these subdomains in a file called domains.txt.
+        I ran <kbd><span id='pinktext'>httpx</span></kbd> to get live subdomains.<br></p>
+        <p><kbd><span id='bluetext'>httpx -follow-host-redirects -l domains.txt | tee -a urls.txt</span></kbd></p>
+        <p>Sometimes this can contain duplicate urls. Which can be sorted by running <kbd><span id='bluetext'>sort -u urls.txt | tee -a urls.txt</span></kbd></p>
+        <p>
+        Now we have a list of <kbd><span id="pinktext"> active subdomains</span></kbd> after probing.  
+        At this point, as mentioned in my previous blog, I was searching for keywords like <kbd><span id='pinktext'>internal, staging, stg, developer, admin, etc</span></kbd> and started testing these manually.<br></p>
+      
+      <h1 class="display-4" style="margin-top: 2%;"><span id="bluetext">What about the other</span><span id="pinktext"> subdomains?</span></h1>
+      <hr style="height:4px;">
+      <p>While testing for these above found interesting subdomains manually, I ran <kbd><span id='pinktext'>nuclei</span></kbd> on the urls to find tech stack it was using.<br>
+       I have a directory named tech-exposures containing <kbd><span id='pinktext'>exposed-panels</span></kbd> and <kbd><span id='pinktext'>technogies tempalates</span></kbd>.<br> 
+       <kbd><span id='bluetext'>nuclei -l urls.txt -t /nuclei-templates/tech-exposures | tee -a nuclei.txt</span></kbd><br>
+       <kbd><span id='bluetext'>cat nuclei.txt</span></kbd>
+      </p>
+      <script src="https://gist.github.com/fantasticpanthom/07062e439e5f07a97bbeb2add6a65ff7.js"></script>
+      <p>Now categorise them into separate text files based on the stack detected.<br><br>
+      <kbd><span id='pinktext'>cat nuclei.txt | cut -d ' ' -f3 | sed 's/\[//g' | sed 's/\]//g' | sed 's/tech-detect://g'| sort -u | xargs -n1 -I{} sh -c 'cat nuclei.txt | grep {} | tee -a {}.txt'</span></kbd></p>
+      <p>First let us discuss why I do this then we will move on to break the command down into parts and understand how it works.</p>
+      <h5 class="display-4" style="margin-top: 2%;"><span id="bluetext">Why do I separate these on basis of </span><span id="pinktext">common tech stack?</span></h5>
+      <hr style="height:4px;">
+      <p>Reason behind sorting these is<br>
+      <ul><li><p>If a particular subdomain is vulnerable to a particular vulnerability based on stack most likely others are also vulnerable.</p></li>
+      <li><p>When using tools like <kbd><span id="pinktext">nuclei</span></kbd> to scan for cves or vulnerabilities , we dont have to waste time and resources running unnecessary templates</p></li></ul></p>
+      <h5 class="display-4" style="margin-top: 2%;"><span id="bluetext">Understanding the </span><span id="pinktext">l0000ng command</span></h5>
+      <p>Lets us the take the line <kbd><span id='bluetext'>[2021-04-27 18:11:10] [solr-exposure] [http] [medium] https://pre-prod.redacted.com/solr/</span></kbd><br>
+      what <kbd><span id="pinktext">cut -d ' ' -f3</span></kbd> does is it breaks down every line of the file at <kbd><span id="pinktext">' ' i.e space</span></kbd> and gives out the 3rd field.Below is a image depicting the same.</p>
+      <img src='images/blog1/cut.png' class='img-fluid' alt="cut"><br><br>
+      <script src="https://gist.github.com/fantasticpanthom/f9b9460e916bb61cc5a199f6e6246853.js"></script>
+      <p>What <kbd><span id="pinktext">sed 's/\[//g'</span></kbd> does to <kbd><span id="bluetext">[tech-detect:ms-iis]?</span></kbd></p>
+      <p>This command searches for [ (\ escape character) and replaces it with nothing at all places.Below is a image depicting the same.</p>
+      <img src="images/blog1/sed.png" class="img-fluid"  alt="sed"><br><br>
+      <script src="https://gist.github.com/fantasticpanthom/82e16a42b3f6b38f941a98336705c438.js"></script>
+      <script src="https://gist.github.com/fantasticpanthom/97d016bbd5bb3f938634222c81cd1dd4.js"></script>
+      <script src="https://gist.github.com/fantasticpanthom/99853daa074b4d8f13361e85f5cc61b3.js"></script>
+      <p><kbd><span id="pinktext">sort -u</span></kbd>takes the list and gives out<kbd><span id="bluetext">all unique</span></kbd>items from them.</p>
+      <script src="https://gist.github.com/fantasticpanthom/ed6862764b8aa560e6bbabb62ef6f0fc.js"></script>
+      <p><kbd><span id="pinktext">xargs -n1 -I{} sh -c 'cat nuclei.txt | grep {} | tee -a {}.txt'</span></kbd></p>
+      <p>This takes one line at a time and searches for the particular line in nuclei.txt and appends the matched line to linename.txt</p>
+      <img src='images/blog1/xargsd.png' class='img-fluid' alt='xargs'><br><br>
+      <script src="https://gist.github.com/fantasticpanthom/508de2a9dd6e3990ebc133648e958f8d.js"></script>
+      <p>Now as we have urls for tech specific stack we can now not waste our time and resource by running all templates.<br>
+      From here on it was mostly googling for known vulnerabilities , reports from hacktivity and CVE's on the same tech stack like CVE "keyword" (Eg : CVE solr, hackerone solr) to find CVEs and reports from hackerone hacktivity and find relevant exploits for the found CVE or reports from hackerone which got me my 3 RCEs (dupe ¯\(°_o)/¯) on a private program on Bugcrowd.</p>
+      <p>This is how I use nuclei to speedup my testing process and this doesnt eliminate the need for manual testing in any way. I highly suggest you to test all domains or atleast check what they are having there manually.</p>
+      
+      <h1 class="display-4" style="margin-top: 2%;"><span id="redtext">Common Errors and How to resolve them</span></h1>
+      <hr style="height:4px;">
+      <p>One common error that I have made in my past is overwriting existing files i.e I already had a file called nuclei.txt and erased its contect with new content. So,I highly suggest you to use almost always -a tag with tee as it doesnt overwrite but just appends it to existing file so no previous data is lost.</p>
+      <p>Even when using -a what if we had data of say redacted1.com in file.txt and we appended details of redacted2.com into the same file.<br>
+        This can also be easily sorted out by running the following commands <kbd><span id="bluetext">cat file.txt | grep 'redacted2.com' | tee -a redacted2.txt</span></kbd> , <kbd><span id='bluetext'>cat file.txt | grep -v 'redacted2.com' | tee -a oldfile.txt</span></kbd> and <kbd><span id='bluetext'>rm file.txt</span></kbd></p>   
+      <p>Hope you enjoyed reading this and if you have any suggestions related to this or want to discuss with me about some security related stuff feel free to contact me.  <a class="navbar-brand" href="index.html"><kbd>HOME</kbd></a> has my contact information.<br>
+        HAPPY <span id="pinktext">LEARNING</span> and HAPPY <span id="bluetext">HACKING</span> !!!.
+      </p>
+      
+
+<script>
+    var cursor = true;
+    var speed = 500;        setInterval(() => {
+      if(cursor) {
+        document.getElementById('cursor').style.opacity = 0;
+        cursor = false;
+      }else {
+        document.getElementById('cursor').style.opacity = 1;
+        cursor = true;
+      }
+    }, speed);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</body>
+</html>
